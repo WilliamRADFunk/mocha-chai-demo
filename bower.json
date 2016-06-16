@@ -1,0 +1,11 @@
+{
+  "name": "mochachino",
+  "authors": [
+    "William Funk <wfunk@knights.ucf.edu>"
+  ],
+  "description": "A demo of using mochajs and eventually chaijs",
+  "main": "",
+  "license": "None",
+  "homepage": "https://materia.ucf.edu/",
+  "private": true
+}

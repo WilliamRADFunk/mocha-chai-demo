@@ -1,7 +1,7 @@
 {
-  "name": "mochachino",
+  "name": "mocha-chai-demo",
   "authors": [
-    "William Funk <wfunk@knights.ucf.edu>"
+    "William R.A.D. Funk <contact@williamradfunk.com>"
   ],
   "description": "A demo of using mochajs and eventually chaijs",
   "main": "",

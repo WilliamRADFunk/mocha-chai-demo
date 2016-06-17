@@ -1,11 +1,12 @@
-Namespace('Functions').Engine = (function()
+function getFirstName(fname)
 {
-	var getFirstName = function(fname)
-	{
-		return fname;
-	}
-})();
-
+	return fname;
+}
+function isEven(num)
+{
+  if (num%2 !== 0) return false;
+  return true;
+}
 
 
 

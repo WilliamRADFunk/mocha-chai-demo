@@ -1,4 +1,24 @@
-exports.rgbToHex = function(red, green, blue) {
+Namespace('Functions').Engine = (function()
+{
+	var getFirstName = function(fname)
+	{
+		return fname;
+	}
+})();
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*exports.rgbToHex = function(red, green, blue) {
 
   var redHex   = red.toString(16);
   var greenHex = green.toString(16);
@@ -21,3 +41,4 @@ exports.hexToRgb = function(hex) {
   return [red, green, blue];
 
 };
+*/

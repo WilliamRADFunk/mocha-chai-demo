@@ -1,6 +1,13 @@
 var expect  = require("chai").expect;
 var request = require("request");
 
+
+
+
+
+
+
+/*
 describe("Color Code Converter API", function() {
 
   describe("RGB to Hex conversion", function() {
@@ -42,3 +49,4 @@ describe("Color Code Converter API", function() {
   });
 
 });
+*/

@@ -67,3 +67,103 @@ describe("@Input validation Functions", function()
 		});
 	});
 });
+
+
+var sendOutcomeBack = function()
+{
+	var masterTestIndex = [];
+	var masterTestObject = { tests: masterTestIndex };
+	var numOfInnerTests = 0;
+	$('#mocha-report li.suite').each(function(index, res) {
+		// Getting the title of the test group/test
+		var a = (res.getElementsByTagName("h1")[0]).getElementsByTagName("a")[0].text;
+		// Separating the difference between an outer category from inner.
+		if (a.charAt(0) === '@')
+		{
+			numOfInnerTests = res.getElementsByTagName("h1").length -1;
+			masterTestObject.tests.push( {id: (a.substr(1))} );
+		}
+		else
+		{
+			// If outerloop was there, add these to its subkeys. Otherwise, treat it as level 1.
+			var firstLevel = true;
+			if(numOfInnerTests > 0)
+			{
+				firstLevel = false;
+				if(masterTestObject.tests[(masterTestObject.tests).length-1].innerTests != undefined)
+				{
+					masterTestObject.tests[(masterTestObject.tests).length-1].innerTests.push( {id: (a.substr(1))} );
+				}
+				else
+				{
+					masterTestObject.tests[(masterTestObject.tests).length-1].innerTests = [];
+					masterTestObject.tests[(masterTestObject.tests).length-1].innerTests.push( {id: (a.substr(1))} );
+				}
+				numOfInnerTests--;
+			}
+			else
+			{
+				masterTestObject.tests.push( {id: (a.substr(1))} );
+			}
+			var ul = res.getElementsByTagName("li");
+			$.each(ul, function(index, li) {
+				var h2 = li.getElementsByTagName("h2")[0].innerHTML;
+				h2 = h2.substr(0, h2.indexOf('<a'));
+				if(firstLevel)
+				{
+					masterTestObject.tests[(masterTestObject.tests).length-1].title = h2;
+				}
+				else
+				{
+					var len = (masterTestObject.tests[(masterTestObject.tests).length-1].innerTests).length;
+					masterTestObject.tests[(masterTestObject.tests).length-1].innerTests[len-1].title = h2;
+				}
+				// TODO: Capture the duration span contents, too.
+				var pre = li.getElementsByTagName("pre");
+				var isError = false;
+				$.each(pre, function(index, preContent)
+				{
+					if($(preContent).hasClass('error'))
+					{
+						if(firstLevel)
+						{
+							masterTestObject.tests[(masterTestObject.tests).length-1].status = "failed";
+							var content = (preContent.innerHTML).replace('\n', '');
+							var editedContent = content.substr(0, content.indexOf(' at Context')) + content.substr(content.lastIndexOf(';')+1);
+							masterTestObject.tests[(masterTestObject.tests).length-1].errorMsg = editedContent;
+							isError = true;
+						}
+						else
+						{
+							var len = (masterTestObject.tests[(masterTestObject.tests).length-1].innerTests).length;
+							masterTestObject.tests[(masterTestObject.tests).length-1].innerTests[len-1].status = "failed";
+							var content = (preContent.innerHTML).replace('\n', '');
+							var editedContent = content.substr(0, content.indexOf(' at Context')) + content.substr(content.lastIndexOf(';')+1);
+							masterTestObject.tests[(masterTestObject.tests).length-1].innerTests[len-1].errorMsg = editedContent;
+							isError = true;
+						}
+					}
+					else if(isError)
+					{
+						isError = false;
+					}
+					else
+					{
+						if(firstLevel)
+						{
+							masterTestObject.tests[(masterTestObject.tests).length-1].status = "passed";
+						}
+						else
+						{
+							var len = (masterTestObject.tests[(masterTestObject.tests).length-1].innerTests).length;
+							masterTestObject.tests[(masterTestObject.tests).length-1].innerTests[len-1].status = "passed";
+						}
+					}
+				});
+			});
+		}
+	});
+	masterTestObject = encodeURIComponent(JSON.stringify(masterTestObject));
+	console.log(masterTestObject);
+	location.href = "localhost:3000/" + masterTestObject;
+}

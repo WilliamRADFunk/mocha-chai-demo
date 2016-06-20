@@ -19,55 +19,7 @@
 	<script>
 		setTimeout( function()
 		{
-			var outerLog = 0;
-			$('#mocha-report li.suite').each(function(index, res) {
-				//console.log(index, ": ", res);
-				var h1 = res.getElementsByTagName("h1")[0];
-				var a = h1.getElementsByTagName("a")[0].text;
-				if (a.charAt(0) === '@')
-				{
-					outerLog = res.getElementsByTagName("h1").length -1;
-					console.log(a.substr(1));
-				}
-				else
-				{
-					var indent = "";
-					if(outerLog > 0)
-					{
-						indent = "     ";
-						outerLog--;
-					}
-					console.log(indent, a.substr(1));
-					var ul = res.getElementsByTagName("li");
-					$.each(ul, function(index, li) {
-						var h2 = li.getElementsByTagName("h2")[0].innerHTML;
-						h2 = h2.substr(0, h2.indexOf('<a'));
-						console.log(indent, "     ", h2);
-						// TODO: Capture the duration span contents, too.
-						var pre = li.getElementsByTagName("pre");
-						var isError = false;
-						$.each(pre, function(index, preContent)
-						{
-							if($(pre).hasClass('error'))
-							{
-								console.log(indent, "          ", "failed");
-								var content = (preContent.innerHTML).replace('\n', '');
-								var editedContent = content.substr(0, content.indexOf(' at Context')) + content.substr(content.lastIndexOf(';')+1);
-								console.log(indent, "               ", editedContent);
-								isError = true;
-							}
-							else if(isError)
-							{
-								isError = false;
-							}
-							else
-							{
-								console.log(indent, "          ", "passed");
-							}
-						});
-					});
-				}
-			});
+			sendOutcomeBack();
 		}, 2000);
 	</script>
 </body>

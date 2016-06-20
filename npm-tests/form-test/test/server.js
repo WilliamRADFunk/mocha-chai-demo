@@ -2,6 +2,9 @@ var request = require("request");
 var express = require("express");
 var app = express();
 var open = require('open');
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 open('http://localhost:3000/');
 // viewed at http://localhost:3000
@@ -16,6 +19,11 @@ app.get('/functions.js', function(req, res)
 app.get('/app/functions.js', function(req, res)
 {
 	res.sendFile(__dirname.substr(0, __dirname.length-5) + '/app/functions.js');
+});
+app.post('/:results', function(req, res)
+{
+	console.log("Hello");
+	console.log(req.body.results);
 });
 
 app.listen(3000);

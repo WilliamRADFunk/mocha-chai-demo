@@ -20,10 +20,11 @@ app.get('/app/functions.js', function(req, res)
 {
 	res.sendFile(__dirname.substr(0, __dirname.length-5) + '/app/functions.js');
 });
-app.post('/:results', function(req, res)
+app.post('/testResults', function(req, res)
 {
-	console.log("Hello");
-	console.log(req.body.results);
+	var bigPackage = req.body.tests;
+	console.log(bigPackage);
+	res.send('transmission received');
 });
 
 app.listen(3000);

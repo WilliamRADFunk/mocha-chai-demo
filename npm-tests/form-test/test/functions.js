@@ -68,7 +68,16 @@ describe("@Input validation Functions", function()
 	});
 });
 
-
+function ajax(url, data)
+{
+	$.post(url, data, function(e){
+		if(e === 'transmission received')
+		{
+			console.log("transmission successfully sent");
+		}
+	});
+}
+// Grabs relevant content from the DOM, filters it, puts it in JSON format, and send back to the Express server.
 var sendOutcomeBack = function()
 {
 	var masterTestIndex = [];
@@ -101,24 +110,28 @@ var sendOutcomeBack = function()
 				}
 				numOfInnerTests--;
 			}
-			else
-			{
-				masterTestObject.tests.push( {id: (a.substr(1))} );
-			}
+			else { masterTestObject.tests.push( {id: (a.substr(1))} ); }
 			var ul = res.getElementsByTagName("li");
 			$.each(ul, function(index, li) {
+				// Gets the title of the test, originally buried in li > h2 > a
 				var h2 = li.getElementsByTagName("h2")[0].innerHTML;
 				h2 = h2.substr(0, h2.indexOf('<a'));
-				if(firstLevel)
-				{
-					masterTestObject.tests[(masterTestObject.tests).length-1].title = h2;
-				}
+				// Find the various indices to factor out span tags from speed if present.
+				var h2Left = h2.substr(0, h2.indexOf('<span class="duration">'));
+				var h2Middle = " (duration: ";
+				var durationLeftIndex = h2.indexOf('<span class="duration">')+23;
+				var durationRightIndex = h2.lastIndexOf('</span>');
+				var h2Right = h2.substring(durationLeftIndex, durationRightIndex) + ")";
+				// If speed was displayed, factor out the span tags.
+				if(durationRightIndex > -1) { h2 = h2Left + h2Middle + h2Right; }
+				// Places new test title in first or send level, depending on originally displayed level.
+				if(firstLevel) { masterTestObject.tests[(masterTestObject.tests).length-1].title = h2; }
 				else
 				{
 					var len = (masterTestObject.tests[(masterTestObject.tests).length-1].innerTests).length;
 					masterTestObject.tests[(masterTestObject.tests).length-1].innerTests[len-1].title = h2;
 				}
-				// TODO: Capture the duration span contents, too.
+				// Gets the pass/fail details of each test
 				var pre = li.getElementsByTagName("pre");
 				var isError = false;
 				$.each(pre, function(index, preContent)
@@ -143,16 +156,10 @@ var sendOutcomeBack = function()
 							isError = true;
 						}
 					}
-					else if(isError)
-					{
-						isError = false;
-					}
+					else if(isError) { isError = false; }
 					else
 					{
-						if(firstLevel)
-						{
-							masterTestObject.tests[(masterTestObject.tests).length-1].status = "passed";
-						}
+						if(firstLevel) { masterTestObject.tests[(masterTestObject.tests).length-1].status = "passed"; }
 						else
 						{
 							var len = (masterTestObject.tests[(masterTestObject.tests).length-1].innerTests).length;
@@ -163,7 +170,6 @@ var sendOutcomeBack = function()
 			});
 		}
 	});
-	masterTestObject = encodeURIComponent(JSON.stringify(masterTestObject));
-	console.log(masterTestObject);
-	location.href = "localhost:3000/" + masterTestObject;
+	// Sends the compile data back to the server for use by node.
+	ajax("http://localhost:3000/testResults", masterTestObject);
 }

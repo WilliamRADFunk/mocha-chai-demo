@@ -1,3 +1,4 @@
+var colors = require('colors');
 var request = require("request");
 var express = require("express");
 var app = express();
@@ -23,14 +24,46 @@ app.get('/app/functions.js', function(req, res)
 app.post('/testResults', function(req, res)
 {
 	var bigPackage = req.body.tests;
-	console.log(bigPackage);
+	//console.log(bigPackage);
+	displayResults(bigPackage);
 	res.send('transmission received');
 });
 
 app.listen(3000);
 
 
+function displayResults(results)
+{
+	for(var i = 0; i < results.length; i++)
+	{
+		console.log("");
+		if(results[i].innerTests)
+		{
 
+		}
+		else
+		{
+			for(var k = 0; k < results[i].title.length; k++)
+			{
+				if(results[i].status[k] == "passed")
+				{
+					var successOutput = '\u2713'.green + "\t"; // Green check mark
+					successOutput += results[i].id + ": " + results[i].title[k] + " "; // Category title and test title.
+					if(results[i].speed[k] != "-1") successOutput += "(" + results[i].speed[k] + ")"; // Speed output
+					console.log(successOutput);
+				}
+				else
+				{
+					var failureOutput = '\u2717'.red + "\t"; // Red X mark
+					failureOutput += results[i].id + ": " + results[i].title[k] + " "; // Category title and test title.
+					if(results[i].speed[k] != "-1") failureOutput += "(" + results[i].speed[k] + ")"; // Speed output
+					failureOutput += "\n\t\t" + results[i].errorMsg[k].red; // Error message
+					console.log(failureOutput);
+				}
+			}
+		}
+	}
+}
 /*
 describe("Color Code Converter API", function() {
 

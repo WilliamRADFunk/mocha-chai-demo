@@ -90,7 +90,7 @@ var sendOutcomeBack = function()
 		if (a.charAt(0) === '@')
 		{
 			numOfInnerTests = res.getElementsByTagName("h1").length -1;
-			masterTestObject.tests.push( {id: (a.substr(1))} );
+			masterTestObject.tests.push( { id: (a.substr(1)), title: [], speed: [], status: [], errorMsg: [] } );
 		}
 		else
 		{
@@ -101,69 +101,80 @@ var sendOutcomeBack = function()
 				firstLevel = false;
 				if(masterTestObject.tests[(masterTestObject.tests).length-1].innerTests != undefined)
 				{
-					masterTestObject.tests[(masterTestObject.tests).length-1].innerTests.push( {id: (a.substr(1))} );
+					masterTestObject.tests[(masterTestObject.tests).length-1].innerTests.push( { id: (a.substr(1)), title: [], speed: [], status: [], errorMsg: [] } );
 				}
 				else
 				{
 					masterTestObject.tests[(masterTestObject.tests).length-1].innerTests = [];
-					masterTestObject.tests[(masterTestObject.tests).length-1].innerTests.push( {id: (a.substr(1))} );
+					masterTestObject.tests[(masterTestObject.tests).length-1].innerTests.push( { id: (a.substr(1)), title: [], speed: [], status: [], errorMsg: [] } );
 				}
 				numOfInnerTests--;
 			}
-			else { masterTestObject.tests.push( {id: (a.substr(1))} ); }
+			else { masterTestObject.tests.push( { id: (a.substr(1)), title: [], speed: [], status: [], errorMsg: [] } ) };
 			var ul = res.getElementsByTagName("li");
 			$.each(ul, function(index, li) {
 				// Gets the title of the test, originally buried in li > h2 > a
 				var h2 = li.getElementsByTagName("h2")[0].innerHTML;
 				h2 = h2.substr(0, h2.indexOf('<a'));
+				console.log(h2);
 				// Find the various indices to factor out span tags from speed if present.
 				var h2Left = h2.substr(0, h2.indexOf('<span class="duration">'));
 				var h2Middle = " (duration: ";
 				var durationLeftIndex = h2.indexOf('<span class="duration">')+23;
 				var durationRightIndex = h2.lastIndexOf('</span>');
-				var h2Right = h2.substring(durationLeftIndex, durationRightIndex) + ")";
+				var speed = "-1";
 				// If speed was displayed, factor out the span tags.
-				if(durationRightIndex > -1) { h2 = h2Left + h2Middle + h2Right; }
+				if(durationRightIndex > -1)
+				{
+					speed = h2.substring(durationLeftIndex, durationRightIndex);
+					h2 = h2Left;
+				}
 				// Places new test title in first or send level, depending on originally displayed level.
-				if(firstLevel) { masterTestObject.tests[(masterTestObject.tests).length-1].title = h2; }
+				if(firstLevel)
+				{
+					masterTestObject.tests[(masterTestObject.tests).length-1].title.push(h2);
+					masterTestObject.tests[(masterTestObject.tests).length-1].speed.push(speed);
+				}
 				else
 				{
 					var len = (masterTestObject.tests[(masterTestObject.tests).length-1].innerTests).length;
-					masterTestObject.tests[(masterTestObject.tests).length-1].innerTests[len-1].title = h2;
+					masterTestObject.tests[(masterTestObject.tests).length-1].innerTests[len-1].title.push(h2);
+					masterTestObject.tests[(masterTestObject.tests).length-1].innerTests[len-1].speed.push(speed);
 				}
 				// Gets the pass/fail details of each test
 				var pre = li.getElementsByTagName("pre");
-				var isError = false;
 				$.each(pre, function(index, preContent)
 				{
 					if($(preContent).hasClass('error'))
 					{
 						if(firstLevel)
 						{
-							masterTestObject.tests[(masterTestObject.tests).length-1].status = "failed";
+							masterTestObject.tests[(masterTestObject.tests).length-1].status.push("failed");
 							var content = (preContent.innerHTML).replace('\n', '');
 							var editedContent = content.substr(0, content.indexOf(' at Context')) + content.substr(content.lastIndexOf(';')+1);
-							masterTestObject.tests[(masterTestObject.tests).length-1].errorMsg = editedContent;
-							isError = true;
+							masterTestObject.tests[(masterTestObject.tests).length-1].errorMsg.push(editedContent);
 						}
 						else
 						{
 							var len = (masterTestObject.tests[(masterTestObject.tests).length-1].innerTests).length;
-							masterTestObject.tests[(masterTestObject.tests).length-1].innerTests[len-1].status = "failed";
+							masterTestObject.tests[(masterTestObject.tests).length-1].innerTests[len-1].status.push("failed");
 							var content = (preContent.innerHTML).replace('\n', '');
 							var editedContent = content.substr(0, content.indexOf(' at Context')) + content.substr(content.lastIndexOf(';')+1);
-							masterTestObject.tests[(masterTestObject.tests).length-1].innerTests[len-1].errorMsg = editedContent;
-							isError = true;
+							masterTestObject.tests[(masterTestObject.tests).length-1].innerTests[len-1].errorMsg.push(editedContent);
 						}
 					}
-					else if(isError) { isError = false; }
 					else
 					{
-						if(firstLevel) { masterTestObject.tests[(masterTestObject.tests).length-1].status = "passed"; }
+						if(firstLevel)
+						{
+							masterTestObject.tests[(masterTestObject.tests).length-1].status.push("passed");
+							masterTestObject.tests[(masterTestObject.tests).length-1].errorMsg.push("");
+						}
 						else
 						{
 							var len = (masterTestObject.tests[(masterTestObject.tests).length-1].innerTests).length;
-							masterTestObject.tests[(masterTestObject.tests).length-1].innerTests[len-1].status = "passed";
+							masterTestObject.tests[(masterTestObject.tests).length-1].innerTests[len-1].status.push("passed");
+							masterTestObject.tests[(masterTestObject.tests).length-1].innerTests[len-1].errorMsg.push("");
 						}
 					}
 				});

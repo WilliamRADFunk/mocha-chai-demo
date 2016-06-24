@@ -4,6 +4,9 @@ var express = require("express");
 var app = express();
 var open = require('open');
 var bodyParser = require('body-parser');
+var mocha = require('mocha');
+var expect = require('chai').expect;
+var should = require('chai').should();
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
@@ -23,14 +26,11 @@ app.get('/app/functions.js', function(req, res)
 });
 app.post('/testResults', function(req, res)
 {
-	var bigPackage = req.body.tests;
-	//console.log(bigPackage);
-	displayResults(bigPackage);
+	displayResults(req.body.tests);
 	res.send('transmission received');
 });
 
 app.listen(3000);
-
 
 function displayResults(results)
 {
@@ -85,46 +85,3 @@ function displayResults(results)
 		}
 	}
 }
-/*
-describe("Color Code Converter API", function() {
-
-  describe("RGB to Hex conversion", function() {
-
-	var url = "http://localhost:3000/rgbToHex?red=255&green=255&blue=255";
-
-	it("returns status 200", function(done) {
-	  request(url, function(error, response, body) {
-		expect(response.statusCode).to.equal(200);
-		done();
-	  });
-	});
-
-	it("returns the color in hex", function(done) {
-	  request(url, function(error, response, body) {
-		expect(body).to.equal("ffffff");
-		done();
-	  });
-	});
-
-  });
-
-  describe("Hex to RGB conversion", function() {
-	var url = "http://localhost:3000/hexToRgb?hex=00ff00";
-
-	it("returns status 200", function(done) {
-	  request(url, function(error, response, body) {
-		expect(response.statusCode).to.equal(200);
-		done();
-	  });
-	});
-
-	it("returns the color in RGB", function(done) {
-	  request(url, function(error, response, body) {
-		expect(body).to.equal("[0,255,0]");
-		done();
-	  });
-	});
-  });
-
-});
-*/

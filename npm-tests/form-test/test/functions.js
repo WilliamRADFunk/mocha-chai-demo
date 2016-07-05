@@ -67,47 +67,6 @@ describe("@Input validation Functions", function()
 		});
 	});
 });
-describe("@Color Code Converter API", function() {
-
-  describe("#RGB to Hex conversion api", function() {
-
-	var url = "http://localhost:3011/rgbToHex?red=255&green=255&blue=255";
-
-	it("returns status 200", function(done) {
-	  request(url, function(error, response, body) {
-		expect(response.statusCode).to.equal(200);
-		done();
-	  });
-	});
-
-	it("returns the color in hex", function(done) {
-	  request(url, function(error, response, body) {
-		expect(body).to.equal("ffffff");
-		done();
-	  });
-	});
-
-  });
-
-  describe("#Hex to RGB conversion api", function() {
-	var url = "http://localhost:3011/hexToRgb?hex=00ff00";
-
-	it("returns status 200", function(done) {
-	  request(url, function(error, response, body) {
-		expect(response.statusCode).to.equal(200);
-		done();
-	  });
-	});
-
-	it("returns the color in RGB", function(done) {
-	  request(url, function(error, response, body) {
-		expect(body).to.equal("[0,255,0]");
-		done();
-	  });
-	});
-  });
-});
-
 
 
 
@@ -160,7 +119,6 @@ var sendOutcomeBack = function()
 				// Gets the title of the test, originally buried in li > h2 > a
 				var h2 = li.getElementsByTagName("h2")[0].innerHTML;
 				h2 = h2.substr(0, h2.indexOf('<a'));
-				console.log(h2);
 				// Find the various indices to factor out span tags from speed if present.
 				var h2Left = h2.substr(0, h2.indexOf('<span class="duration">'));
 				var h2Middle = " (duration: ";
@@ -187,6 +145,7 @@ var sendOutcomeBack = function()
 				}
 				// Gets the pass/fail details of each test
 				var pre = li.getElementsByTagName("pre");
+				var isError = false;
 				$.each(pre, function(index, preContent)
 				{
 					if($(preContent).hasClass('error'))
@@ -206,7 +165,9 @@ var sendOutcomeBack = function()
 							var editedContent = content.substr(0, content.indexOf(' at Context')) + content.substr(content.lastIndexOf(';')+1);
 							masterTestObject.tests[(masterTestObject.tests).length-1].innerTests[len-1].errorMsg.push(editedContent);
 						}
+						isError = true;
 					}
+					else if(isError) isError = false;
 					else
 					{
 						if(firstLevel)

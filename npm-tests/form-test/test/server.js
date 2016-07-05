@@ -4,9 +4,8 @@ var express = require("express");
 var app = express();
 var open = require('open');
 var bodyParser = require('body-parser');
-var mocha = require('mocha');
 var expect = require('chai').expect;
-var should = require('chai').should();
+var exec = require('exec');
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
@@ -29,6 +28,7 @@ app.post('/testResults', function(req, res)
 	displayResults(req.body.tests);
 	res.send('transmission received');
 });
+
 
 app.listen(3000);
 

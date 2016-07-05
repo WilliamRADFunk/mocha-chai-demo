@@ -34,6 +34,12 @@ app.listen(3000);
 
 function displayResults(results)
 {
+	console.log("################################################################################\n" +
+				"Non-Node Tests Starting...\n" +
+				"################################################################################\n\n");
+	var successCount = 0;
+	var failureCount = 0;
+	var totalTime = 0;
 	for(var i = 0; i < results.length; i++)
 	{
 		console.log("");
@@ -46,16 +52,26 @@ function displayResults(results)
 				{
 					if(results[i].innerTests[j].status[k] == "passed")
 					{
+						successCount++;
 						var successOutput = '\u2713'.green + "\t"; // Green check mark
 						successOutput += results[i].innerTests[j].id + ": " + results[i].innerTests[j].title[k] + " "; // Category title and test title.
-						if(results[i].innerTests[j].speed[k] != "-1") successOutput += "(" + results[i].innerTests[j].speed[k] + ")"; // Speed output
+						if(results[i].innerTests[j].speed[k] != "-1")
+						{
+							totalTime += parseInt((results[i].innerTests[j].speed[k]).slice(0, -2));
+							successOutput += "(" + results[i].innerTests[j].speed[k] + ")"; // Speed output
+						}
 						console.log(successOutput);
 					}
 					else
 					{
+						failureCount++;
 						var failureOutput = '\u2717'.red + "\t"; // Red X mark
 						failureOutput += results[i].innerTests[j].id + ": " + results[i].innerTests[j].title[k] + " "; // Category title and test title.
-						if(results[i].innerTests[j].speed[k] != "-1") failureOutput += "(" + results[i].innerTests[j].speed[k] + ")"; // Speed output
+						if(results[i].innerTests[j].speed[k] != "-1")
+						{
+							totalTime += parseInt((results[i].innerTests[j].speed[k]).slice(0, -2));
+							failureOutput += "(" + results[i].innerTests[j].speed[k] + ")"; // Speed output
+						}
 						failureOutput += "\n\t\t" + results[i].innerTests[j].errorMsg[k].red; // Error message
 						console.log(failureOutput);
 					}
@@ -68,20 +84,41 @@ function displayResults(results)
 			{
 				if(results[i].status[k] == "passed")
 				{
+					successCount++;
 					var successOutput = '\u2713'.green + "\t"; // Green check mark
 					successOutput += results[i].id + ": " + results[i].title[k] + " "; // Category title and test title.
-					if(results[i].speed[k] != "-1") successOutput += "(" + results[i].speed[k] + ")"; // Speed output
+					if(results[i].speed[k] != "-1")
+					{
+						totalTime += parseInt((results[i].speed[k]).slice(0, -2));
+						successOutput += "(" + results[i].speed[k] + ")"; // Speed output
+					}
 					console.log(successOutput);
 				}
 				else
 				{
+					failureCount++;
 					var failureOutput = '\u2717'.red + "\t"; // Red X mark
 					failureOutput += results[i].id + ": " + results[i].title[k] + " "; // Category title and test title.
-					if(results[i].speed[k] != "-1") failureOutput += "(" + results[i].speed[k] + ")"; // Speed output
+					if(results[i].speed[k] != "-1")
+					{
+						totalTime += parseInt((results[i].speed[k]).slice(0, -2));
+						failureOutput += "(" + results[i].speed[k] + ")"; // Speed output
+					}
 					failureOutput += "\n\t\t" + results[i].errorMsg[k].red; // Error message
 					console.log(failureOutput);
 				}
 			}
 		}
 	}
+	console.log("\n\nTests passed: " + successCount + "\nTests failed: " + failureCount + "\nTotal Time: " + totalTime + "ms\n\n");
+	console.log("################################################################################\n" +
+				"Node Tests Starting...\n" +
+				"################################################################################\n\n");
+	exec('mocha test/functions-exports', function(err, out, code)
+	{
+		if (err instanceof Error) throw err;
+		process.stderr.write(err);
+		process.stdout.write(out);
+		process.exit(code);
+	});
 }

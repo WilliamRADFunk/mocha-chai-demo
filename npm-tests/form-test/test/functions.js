@@ -81,7 +81,7 @@ function ajax(url, data)
 	});
 }
 // Grabs relevant content from the DOM, filters it, puts it in JSON format, and send back to the Express server.
-var sendOutcomeBack = function()
+var sendOutcomeBack = function(cb)
 {
 	var masterTestIndex = [];
 	var masterTestObject = { tests: masterTestIndex };
@@ -188,4 +188,6 @@ var sendOutcomeBack = function()
 	});
 	// Sends the compile data back to the server for use by node.
 	ajax("http://localhost:3000/testResults", masterTestObject);
+	// Closes browser window
+	cb();
 }

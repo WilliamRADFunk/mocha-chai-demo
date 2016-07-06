@@ -69,7 +69,40 @@ describe("@Input validation Functions", function()
 		{
 			expect(getFirstName(1)).to.equal(-1);
 		});
+		it("First Name returns a -1 when empty", function()
+		{
+			expect(getFirstName("")).to.equal(-1);
+		});
+		it("First Name returns a -1 when containing a '-' character", function()
+		{
+			expect(getFirstName("-")).to.equal(-1);
+		});
+		it("First Name returns a -1 when containing a '\&' character", function()
+		{
+			expect(getFirstName("&")).to.equal(-1);
+		});
+		it("First Name returns a -1 when containing a '\@' character", function()
+		{
+			expect(getFirstName("@")).to.equal(-1);
+		});
+		it("First Name returns a -1 when containing a '\<' character", function()
+		{
+			expect(getFirstName("<")).to.equal(-1);
+		});
+		it("First Name returns a -1 when containing a '\>' character", function()
+		{
+			expect(getFirstName(">")).to.equal(-1);
+		});
+		it("First Name returns a -1 when containing a '\\' character", function()
+		{
+			expect(getFirstName("\\")).to.equal(-1);
+		});
+		it("First Name returns a -1 when containing a '\/' character", function()
+		{
+			expect(getFirstName("/")).to.equal(-1);
+		});
 	});
+
 	describe("#Last Name is a string without spaces or special character", function()
 	{
 		it("Last Name returns a string when given a string", function()
@@ -78,10 +111,119 @@ describe("@Input validation Functions", function()
 			console.log(document.getElementById("lname").value);
 			expect(getLastName()).to.be.a('string');
 		});
-		it("Last Name returns a string when given a number", function()
+		it("Last Name returns a -1 when given a number", function()
 		{
-			document.getElementById("lname").value = -1;
+			document.getElementById("lname").value = 1;
 			expect(getLastName()).to.equal(-1);
+		});
+		it("Last Name returns a -1 when empty", function()
+		{
+			document.getElementById("lname").value = "";
+			expect(getLastName()).to.equal(-1);
+		});
+		it("Last Name returns a -1 when containing a '-' character", function()
+		{
+			document.getElementById("lname").value = "-";
+			expect(getLastName()).to.equal(-1);
+		});
+		it("Last Name returns a -1 when containing a '\&' character", function()
+		{
+			document.getElementById("lname").value = "&";
+			expect(getLastName()).to.equal(-1);
+		});
+		it("Last Name returns a -1 when containing a '\@' character", function()
+		{
+			document.getElementById("lname").value = "@";
+			expect(getLastName()).to.equal(-1);
+		});
+		it("Last Name returns a -1 when containing a '\<' character", function()
+		{
+			document.getElementById("lname").value = "<";
+			expect(getLastName()).to.equal(-1);
+		});
+		it("Last Name returns a -1 when containing a '\>' character", function()
+		{
+			document.getElementById("lname").value = ">";
+			expect(getLastName()).to.equal(-1);
+		});
+		it("Last Name returns a -1 when containing a '\\' character", function()
+		{
+			document.getElementById("lname").value = "\\";
+			expect(getLastName()).to.equal(-1);
+		});
+		it("Last Name returns a -1 when containing a '\/' character", function()
+		{
+			document.getElementById("lname").value = "/";
+			expect(getLastName()).to.equal(-1);
+		});
+	});
+
+	describe("#Email is in valid email format", function()
+	{
+		it("Email returns an email string when given a non-email string --> 'myEmail@validEmails.com'", function()
+		{
+			document.getElementById("email").value = "myEmail@validEmails.com";
+			expect(getEmail()).to.be.a('string');
+		});
+		it("Email returns an -1 when given a non-email string --> 'myEmail'", function()
+		{
+			document.getElementById("email").value = "myEmail";
+			expect(getEmail()).to.equal(-1);
+		});
+		it("Email returns a -1 when given a number", function()
+		{
+			document.getElementById("email").value = 1;
+			expect(getEmail()).to.equal(-1);
+		});
+		it("Email returns a -1 when empty", function()
+		{
+			document.getElementById("email").value = "";
+			expect(getEmail()).to.equal(-1);
+		});
+		it("Email returns a -1 when domain extension is fake --> 'myEmail@validEmails.comm", function()
+		{
+			document.getElementById("email").value = "myEmail@validEmails.comm";
+			expect(getEmail()).to.equal(-1);
+		});
+		it("Email returns a -1 when missing a '\@' character --> 'Abc.example.com'", function()
+		{
+			document.getElementById("email").value = "Abc.example.com";
+			expect(getEmail()).to.equal(-1);
+		});
+		it("Email returns a -1 when containing more than one '\@' character --> 'A@b@c@example.com'", function()
+		{
+			document.getElementById("email").value = "A@b@c@example.com";
+			expect(getEmail()).to.equal(-1);
+		});
+		it("Email returns a -1 when containing special characters in this local part --> 'a\"b(c)d,e:f;g<h>i[j\k]l@example.com'", function()
+		{
+			document.getElementById("email").value = 'a"b(c)d,e:f;g<h>i[j\k]l@example.com';
+			expect(getEmail()).to.equal(-1);
+		});
+		it("Email returns a -1 when containing quoted strings --> 'just\"not\"right@example.com'", function()
+		{
+			document.getElementById("email").value = 'just"not"right@example.com';
+			expect(getEmail()).to.equal(-1);
+		});
+		it("Email returns a -1 when containing double dot before the \@ --> 'john..doe@example.com'", function()
+		{
+			document.getElementById("email").value = "john..doe@example.com";
+			expect(getEmail()).to.equal(-1);
+		});
+		it("Email returns a -1 when containing double dot after the \@ --> 'john.doe@example..com'", function()
+		{
+			document.getElementById("email").value = "john.doe@example..com";
+			expect(getEmail()).to.equal(-1);
+		});
+		it('Email returns a -1 when containing spaces, quotes, and backslashes without preceded by backslash or contained in double quotes --> \'this is"not\allowed@example.com\'', function()
+		{
+			document.getElementById("email").value = 'this is"not\allowed@example.com';
+			expect(getEmail()).to.equal(-1);
+		});
+		it('Email returns a -1 when containing spaces, quotes, and backslashes, though preceded by backslash, aren\'t contained in double quotes --> \'this\ still\"not\\allowed@example.com\'', function()
+		{
+			document.getElementById("email").value = 'this\ still\"not\\allowed@example.com';
+			expect(getEmail()).to.equal(-1);
 		});
 	});
 });
@@ -99,7 +241,7 @@ function ajax(url, data)
 	});
 }
 // Grabs relevant content from the DOM, filters it, puts it in JSON format, and send back to the Express server.
-var sendOutcomeBack = function()
+var sendOutcomeBack = function(cb)
 {
 	var masterTestIndex = [];
 	var masterTestObject = { tests: masterTestIndex };
@@ -207,5 +349,5 @@ var sendOutcomeBack = function()
 	// Sends the compile data back to the server for use by node.
 	ajax("http://localhost:3000/testResults", masterTestObject);
 	// Closes browser window
-	//cb();
+	cb();
 }

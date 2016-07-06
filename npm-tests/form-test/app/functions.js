@@ -9,6 +9,12 @@ function getLastName()
 	if( /^[a-z]+$/i.test(lname) ) return lname;
 	else return -1;
 }
+function getEmail()
+{
+	var email = document.getElementById("email").value;
+	if( /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|io|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i.test(email) ) return email;
+	else return -1;
+}
 function submitForm()
 {
 	console.log("submit");

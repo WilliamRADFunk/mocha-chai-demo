@@ -1,6 +1,7 @@
 var colors = require('colors');
 var request = require("request");
 var express = require("express");
+var jsdom = require('mocha-jsdom');
 var app = express();
 var open = require('open');
 var bodyParser = require('body-parser');
@@ -14,6 +15,10 @@ open('http://localhost:3000/');
 app.get('/', function(req, res)
 {
 	res.sendFile(__dirname + '/index.html');
+});
+app.get('/realIndex', function(req, res)
+{
+	res.sendFile(__dirname.substr(0, __dirname.length-5) + '/index.html');
 });
 app.get('/functions.js', function(req, res)
 {

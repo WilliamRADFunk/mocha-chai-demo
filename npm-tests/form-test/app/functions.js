@@ -1,6 +1,17 @@
 function getFirstName(fname)
 {
-	return fname;
+	if( /^[a-z]+$/i.test(fname) ) return fname;
+	else return (-1);
+}
+function getLastName()
+{
+	var lname = document.getElementById("lname").value;
+	if( /^[a-z]+$/i.test(lname) ) return lname;
+	else return -1;
+}
+function submitForm()
+{
+	console.log("submit");
 }
 function isEven(num)
 {

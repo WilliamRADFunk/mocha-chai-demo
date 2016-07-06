@@ -61,9 +61,27 @@ describe("@Input validation Functions", function()
 {
 	describe("#First Name is a string without spaces or special character", function()
 	{
-		it("First Name returns a string", function()
+		it("First Name returns a string when given a string", function()
 		{
 			expect(getFirstName("Bob")).to.be.a('string');
+		});
+		it("First Name returns a -1 when given a number", function()
+		{
+			expect(getFirstName(1)).to.equal(-1);
+		});
+	});
+	describe("#Last Name is a string without spaces or special character", function()
+	{
+		it("Last Name returns a string when given a string", function()
+		{
+			document.getElementById("lname").value = "Dillan";
+			console.log(document.getElementById("lname").value);
+			expect(getLastName()).to.be.a('string');
+		});
+		it("Last Name returns a string when given a number", function()
+		{
+			document.getElementById("lname").value = -1;
+			expect(getLastName()).to.equal(-1);
 		});
 	});
 });
@@ -81,7 +99,7 @@ function ajax(url, data)
 	});
 }
 // Grabs relevant content from the DOM, filters it, puts it in JSON format, and send back to the Express server.
-var sendOutcomeBack = function(cb)
+var sendOutcomeBack = function()
 {
 	var masterTestIndex = [];
 	var masterTestObject = { tests: masterTestIndex };
@@ -189,5 +207,5 @@ var sendOutcomeBack = function(cb)
 	// Sends the compile data back to the server for use by node.
 	ajax("http://localhost:3000/testResults", masterTestObject);
 	// Closes browser window
-	cb();
+	//cb();
 }

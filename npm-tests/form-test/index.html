@@ -8,9 +8,9 @@
 	<div id="form-container" style="width: 100%;">
 		<form id="form" style="border: 1px solid black; margin: 100px auto; padding: 30px;text-align: center; width: 80%;">
 			<label for="first-name">First Name:</label><br/>
-			<input type="text" name="first-name" style="margin-top: 10px;"/><br/><br/>
+			<input type="text" id="fname" name="first-name" style="margin-top: 10px;"/><br/><br/>
 			<label for="last-name">Last Name:</label><br/>
-			<input type="text" name="last-name" style="margin-top: 10px;"/><br/><br/>
+			<input type="text" id="lname" name="last-name" style="margin-top: 10px;"/><br/><br/>
 			<label for="email">Email:</label><br/>
 			<input type="email" name="email" style="margin-top: 10px;"/><br/><br/>
 			<label for="phone">Phone:</label><br/>
@@ -19,6 +19,7 @@
 			<input type="number" name="random-number" style="margin-top: 10px;"/><br/><br/>
 			<label for="password">Password:</label><br/>
 			<input type="password" name="password" style="margin-top: 10px;"/>
+			<input type="submit" style="display: block; margin: 20px auto 0px auto; width: 75px;" onclick="submitForm(); return false;" />
 		</form>
 	</div>
 	<script src="app/functions.js"></script>

@@ -20,6 +20,8 @@
     "sinon": "^1.17.4"
   },
   "devDependencies": {
-    "exec": "^0.2.1"
+    "exec": "^0.2.1",
+    "jsdom-global": "^2.0.0",
+    "mocha-jsdom": "^1.1.0"
   }
 }

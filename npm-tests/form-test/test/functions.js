@@ -167,7 +167,6 @@ describe("@Input validation Functions", function()
 		it("getLastName() returns a string when given a string", function()
 		{
 			document.getElementById("lname").value = "Dillan";
-			console.log(document.getElementById("lname").value);
 			expect(getLastName()).to.be.a('string');
 			document.getElementById("lname").value = "";
 		});
@@ -385,6 +384,89 @@ describe("@Input validation Functions", function()
 			document.getElementById("pass").value = "myPassword72+";
 			expect(getPassword()).to.equal(-1);
 			document.getElementById("pass").value = "";
+		});
+	});
+
+	describe("#Submit the form", function()
+	{
+		it("submitForm() returns true when given a valid input ~~~ Bob Dillan bdillan@gmail.com 4078235555 189 myPassword72+", function()
+		{
+			document.getElementById("lname").value = "Dillan";
+			document.getElementById("email").value = "bdillan@gmail.com";
+			document.getElementById("tel").value = 4078235555;
+			document.getElementById("favNum").value = 72;
+			document.getElementById("pass").value = "myPassword72!";
+			expect(submitForm()).to.be.true;
+			document.getElementById("lname").value = "";
+			document.getElementById("email").value = "";
+			document.getElementById("tel").value = "";
+			document.getElementById("favNum").value = "";
+			document.getElementById("pass").value = "";
+		});
+		it("submitForm() returns false if last name field is blank ~~~ Bob bdillan@gmail.com 4078235555 189 myPassword72+", function()
+		{
+			document.getElementById("lname").value = "";
+			document.getElementById("email").value = "bdillan@gmail.com";
+			document.getElementById("tel").value = 4078235555;
+			document.getElementById("favNum").value = 72;
+			document.getElementById("pass").value = "myPassword72!";
+			expect(submitForm()).to.be.false;
+			document.getElementById("email").value = "";
+			document.getElementById("tel").value = "";
+			document.getElementById("favNum").value = "";
+			document.getElementById("pass").value = "";
+		});
+		it("submitForm() returns false if email field is blank ~~~ Bob Dillan 4078235555 189 myPassword72+", function()
+		{
+			document.getElementById("lname").value = "Dillan";
+			document.getElementById("email").value = "";
+			document.getElementById("tel").value = 4078235555;
+			document.getElementById("favNum").value = 72;
+			document.getElementById("pass").value = "myPassword72!";
+			expect(submitForm()).to.be.false;
+			document.getElementById("lname").value = "";
+			document.getElementById("tel").value = "";
+			document.getElementById("favNum").value = "";
+			document.getElementById("pass").value = "";
+		});
+		it("submitForm() returns false if any field is blank ~~~ Bob Dillan bdillan@gmail.com 189 myPassword72+", function()
+		{
+			document.getElementById("lname").value = "Dillan";
+			document.getElementById("email").value = "bdillan@gmail.com";
+			document.getElementById("tel").value = "";
+			document.getElementById("favNum").value = 72;
+			document.getElementById("pass").value = "myPassword72!";
+			expect(submitForm()).to.be.false;
+			document.getElementById("lname").value = "";
+			document.getElementById("email").value = "";
+			document.getElementById("favNum").value = "";
+			document.getElementById("pass").value = "";
+		});
+		it("submitForm() returns false if any field is blank ~~~ Bob Dillan bdillan@gmail.com 4078235555 myPassword72+", function()
+		{
+			document.getElementById("lname").value = "Dillan";
+			document.getElementById("email").value = "bdillan@gmail.com";
+			document.getElementById("tel").value = 4078235555;
+			document.getElementById("favNum").value = "";
+			document.getElementById("pass").value = "myPassword72!";
+			expect(submitForm()).to.be.false;
+			document.getElementById("lname").value = "";
+			document.getElementById("email").value = "";
+			document.getElementById("tel").value = "";
+			document.getElementById("pass").value = "";
+		});
+		it("submitForm() returns false if any field is blank ~~~ Bob Dillan bdillan@gmail.com 4078235555 189", function()
+		{
+			document.getElementById("lname").value = "Dillan";
+			document.getElementById("email").value = "bdillan@gmail.com";
+			document.getElementById("tel").value = 4078235555;
+			document.getElementById("favNum").value = 72;
+			document.getElementById("pass").value = "";
+			expect(submitForm()).to.be.false;
+			document.getElementById("lname").value = "";
+			document.getElementById("email").value = "";
+			document.getElementById("tel").value = "";
+			document.getElementById("favNum").value = "";
 		});
 	});
 });

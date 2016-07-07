@@ -35,7 +35,15 @@ function getPassword()
 }
 function submitForm()
 {
-	console.log("submit");
+	var fname = getFirstName("Bill");
+	var lname = getLastName();
+	var email = getEmail();
+	var phone = getPhone();
+	var favNum = getFavNum();
+	var pass = getPassword();
+
+	if(fname == -1 || lname == -1 || email == -1 || phone == -1 || favNum == null || pass == -1) return false;
+	else return true;
 }
 function isEven(num)
 {

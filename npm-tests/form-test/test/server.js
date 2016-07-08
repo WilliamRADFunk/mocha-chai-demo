@@ -1,4 +1,4 @@
-var colors = require('colors');
+var colors = require('colors-plus');
 var request = require("request");
 var express = require("express");
 var jsdom = require('mocha-jsdom');
@@ -40,7 +40,7 @@ app.listen(3000);
 function displayResults(results)
 {
 	console.log("\n\n################################################################################\n" +
-				"Non-Node Tests Starting...\n" +
+				colors.warning("Non-Node Tests Starting...") + "\n" +
 				"################################################################################\n\n");
 	var successCount = 0;
 	var failureCount = 0;
@@ -58,27 +58,25 @@ function displayResults(results)
 					if(results[i].innerTests[j].status[k] == "passed")
 					{
 						successCount++;
-						var successOutput = '\u2713'.green + "\t"; // Green check mark
-						successOutput += results[i].innerTests[j].id + ": " + results[i].innerTests[j].title[k] + " "; // Category title and test title.
+						var successOutput = results[i].innerTests[j].id + ": " + results[i].innerTests[j].title[k] + " "; // Category title and test title.
 						if(results[i].innerTests[j].speed[k] != "-1")
 						{
 							totalTime += parseInt((results[i].innerTests[j].speed[k]).slice(0, -2));
 							successOutput += "(" + results[i].innerTests[j].speed[k] + ")"; // Speed output
 						}
-						console.log(successOutput);
+						console.log(colors.success(successOutput));
 					}
 					else
 					{
 						failureCount++;
-						var failureOutput = '\u2717'.red + "\t"; // Red X mark
-						failureOutput += results[i].innerTests[j].id + ": " + results[i].innerTests[j].title[k] + " "; // Category title and test title.
+						var failureOutput = results[i].innerTests[j].id + ": " + results[i].innerTests[j].title[k] + " "; // Category title and test title.
 						if(results[i].innerTests[j].speed[k] != "-1")
 						{
 							totalTime += parseInt((results[i].innerTests[j].speed[k]).slice(0, -2));
 							failureOutput += "(" + results[i].innerTests[j].speed[k] + ")"; // Speed output
 						}
 						failureOutput += "\n\t\t" + results[i].innerTests[j].errorMsg[k].red; // Error message
-						console.log(failureOutput);
+						console.log(colors.failure(failureOutput));
 					}
 				}
 			}
@@ -90,19 +88,17 @@ function displayResults(results)
 				if(results[i].status[k] == "passed")
 				{
 					successCount++;
-					var successOutput = '\u2713'.green + "\t"; // Green check mark
 					successOutput += results[i].id + ": " + results[i].title[k] + " "; // Category title and test title.
 					if(results[i].speed[k] != "-1")
 					{
 						totalTime += parseInt((results[i].speed[k]).slice(0, -2));
 						successOutput += "(" + results[i].speed[k] + ")"; // Speed output
 					}
-					console.log(successOutput);
+					console.log(colors.success(successOutput));
 				}
 				else
 				{
 					failureCount++;
-					var failureOutput = '\u2717'.red + "\t"; // Red X mark
 					failureOutput += results[i].id + ": " + results[i].title[k] + " "; // Category title and test title.
 					if(results[i].speed[k] != "-1")
 					{
@@ -110,14 +106,14 @@ function displayResults(results)
 						failureOutput += "(" + results[i].speed[k] + ")"; // Speed output
 					}
 					failureOutput += "\n\t\t" + results[i].errorMsg[k].red; // Error message
-					console.log(failureOutput);
+					console.log(colors.failure(failureOutput));
 				}
 			}
 		}
 	}
 	console.log("\n\nTests passed: " + successCount + "\nTests failed: " + failureCount + "\nTotal Time: " + totalTime + "ms\n\n");
 	console.log("################################################################################\n" +
-				"Node Tests Starting...\n" +
+				colors.warning("Node Tests Starting...") + "\n" +
 				"################################################################################\n\n");
 	exec('mocha test/functions-exports', function(err, out, code)
 	{
